@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronics: Power Amplifiers & Tuned Circuits</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --light: #f4f7f6;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: var(--light); }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        h1, h2, h3 { color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 5px; }
+        .question-box { margin-bottom: 20px; padding: 15px; border-left: 4px solid var(--secondary); background: #fff; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+        button { background: var(--secondary); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        button:hover { background: var(--primary); }
+        .explanation { display: none; margin-top: 10px; padding: 12px; background: #fff3cd; border-radius: 4px; border: 1px solid #ffeeba; }
+        .feedback { font-weight: bold; margin-top: 5px; }
+        .correct { color: var(--success); }
+        .wrong { color: var(--danger); }
+        input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+        .match-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<h1>Electronics Engineering Quiz</h1>
+
+<div class="card">
+    <h2>I. Multiple Choice Questions</h2>
+    
+    <div class="question-box">
+        <p>1. Which power amplifier class provides the highest theoretical efficiency?</p>
+        <div class="options-grid">
+            <label><input type="radio" name="q1" value="A"> A) Class B</label>
+            <label><input type="radio" name="q1" value="B"> B) Class A</label>
+            <label><input type="radio" name="q1" value="C"> C) Class C</label>
+            <label><input type="radio" name="q1" value="D"> D) Class AB</label>
+        </div>
+        <button onclick="checkMCQ('q1', 'C', 'Class C has the highest efficiency (above 78.5 percent) because the transistor conducts for less than 180 degrees of the input cycle.')">Check Answer</button>
+        <div id="expl-q1" class="explanation"></div>
+    </div>
+
+    <div class="question-box">
+        <p>2. In a Class B push-pull amplifier, "crossover distortion" occurs because:</p>
+        <div class="options-grid">
+            <label><input type="radio" name="q2" value="A"> A) Saturation region bias</label>
+            <label><input type="radio" name="q2" value="B"> B) Base-emitter junction needs 0.7V to conduct</label>
+            <label><input type="radio" name="q2" value="C"> C) Center-tapped transformer</label>
+            <label><input type="radio" name="q2" value="D"> D) High-frequency filtering</label>
+        </div>
+        <button onclick="checkMCQ('q2', 'B', 'Transistors do not conduct until the input signal exceeds the knee voltage (approx 0.7V for Silicon), creating a dead zone at zero crossing.')">Check Answer</button>
+        <div id="expl-q2" class="explanation"></div>
+    </div>
+
+    <div class="question-box">
+        <p>3. The maximum theoretical efficiency of a transformer-coupled Class B amplifier is:</p>
+        <div class="options-grid">
+            <label><input type="radio" name="q3" value="A"> A) 25%</label>
+            <label><input type="radio" name="q3" value="B"> B) 50%</label>
+            <label><input type="radio" name="q3" value="C"> C) 78.5%</label>
+            <label><input type="radio" name="q3" value="D"> D) 100%</label>
+        </div>
+        <button onclick="checkMCQ('q3', 'C', 'The efficiency is calculated as (pi divided by 4) times 100, which results in 78.5 percent.')">Check Answer</button>
+        <div id="expl-q3" class="explanation"></div>
+    </div>
+
+    <div class="question-box">
+        <p>4. A Tuned Amplifier is used to amplify:</p>
+        <div class="options-grid">
+            <label><input type="radio" name="q4" value="A"> A) Low-frequency audio</label>
+            <label><input type="radio" name="q4" value="B"> B) Wide band frequencies</label>
+            <label><input type="radio" name="q4" value="C"> C) Only DC signals</label>
+            <label><input type="radio" name="q4" value="D"> D) Narrow band around resonant frequency</label>
+        </div>
+        <button onclick="checkMCQ('q4', 'D', 'Tuned amplifiers use LC circuits to select and amplify a specific narrow range of frequencies.')">Check Answer</button>
+        <div id="expl-q4" class="explanation"></div>
+    </div>
+
+    <div class="question-box">
+        <p>5. The Q-factor (Quality Factor) of a tuned circuit is defined as the ratio of:</p>
+        <div class="options-grid">
+            <label><input type="radio" name="q5" value="A"> A) Resonant Frequency to Bandwidth</label>
+            <label><input type="radio" name="q5" value="B"> B) Bandwidth to Resonant Frequency</label>
+            <label><input type="radio" name="q5" value="C"> C) Output to Input Power</label>
+            <label><input type="radio" name="q5" value="D"> D) Reactance to Resistance</label>
+        </div>
+        <button onclick="checkMCQ('q5', 'A', 'Q is the ratio of resonant frequency divided by the bandwidth (fr / BW).')">Check Answer</button>
+        <div id="expl-q5" class="explanation"></div>
+    </div>
+
+    <div class="question-box">
+        <p>9. The resonance frequency fr of an LC tuned circuit is given by:</p>
+        <div class="options-grid">
+            <label><input type="radio" name="q9" value="A"> A) None</label>
+            <label><input type="radio" name="q9" value="B"> B) 1 / (2 * pi * square root of LC)</label>
+            <label><input type="radio" name="q9" value="C"> C) L / C</label>
+            <label><input type="radio" name="q9" value="D"> D) 2 * LC</label>
+        </div>
+        <button onclick="checkMCQ('q9', 'B', 'The formula is: 1 divided by (2 times pi times the square root of the product of Inductance L and Capacitance C).')">Check Answer</button>
+        <div id="expl-q9" class="explanation"></div>
+    </div>
+</div>
+
+
+
+<div class="card">
+    <h2>II. Fill in the Blanks</h2>
+    <div class="question-box">
+        <p>11. The maximum theoretical efficiency of a Class B push-pull amplifier is <input type="text" id="f11"> 
+        <button onclick="revealFill('f11', '78.5%')">Show Answer</button></p>
+    </div>
+    <div class="question-box">
+        <p>12. A <input type="text" id="f12"> amplifier is one where collector current flows for less than half cycle. 
+        <button onclick="revealFill('f12', 'Class C')">Show Answer</button></p>
+    </div>
+    <div class="question-box">
+        <p>13. Making resonance frequencies of stages slightly different is called <input type="text" id="f13"> tuning. 
+        <button onclick="revealFill('f13', 'Staggered')">Show Answer</button></p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>III. Match the Following</h2>
+    <div class="match-row"><span>16. Class A</span> <span>(a) Conduction angle is 360°</span></div>
+    <div class="match-row"><span>17. Class C</span> <span>(b) Conduction angle < 180°</span></div>
+    <div class="match-row"><span>18. Tuned Amplifier</span> <span>(c) LC Circuit</span></div>
+    <div class="match-row"><span>19. Push-Pull Config</span> <span>(d) Eliminates even harmonics</span></div>
+    <div class="match-row"><span>20. Double Tuned</span> <span>(e) High Selectivity</span></div>
+</div>
+
+
+
+<div class="card">
+    <h2>IV. Subjective Questions</h2>
+    
+    <div class="question-box">
+        <p><strong>1. Explain why Series-fed Class A efficiency is limited to 25%.</strong></p>
+        <button onclick="toggleSubjective('s1')">View Answer Hint</button>
+        <div id="s1" class="explanation">
+            In series-fed Class A, the DC bias current flows through the load at all times, even when no signal is present. This results in massive power wastage as heat in the transistor. Theoretical maximum AC power is only 1/4 of the DC power supplied.
+        </div>
+    </div>
+
+    <div class="question-box">
+        <p><strong>2. Describe the working of a Class B Push-Pull amplifier.</strong></p>
+        <button onclick="toggleSubjective('s2')">View Answer Hint</button>
+        <div id="s2" class="explanation">
+            It uses two transistors: one for the positive half-cycle and one for the negative half-cycle. A center-tapped transformer provides the necessary phase splitting so that each transistor conducts for exactly 180 degrees.
+        </div>
+    </div>
+
+    <div class="question-box">
+        <p><strong>3. What is the effect of coupling coefficient (k) in Double Tuned Amplifiers?</strong></p>
+        <button onclick="toggleSubjective('s3')">View Answer Hint</button>
+        <div id="s3" class="explanation">
+            - Under-critical coupling: Low gain, narrow peak.<br>
+            - Critical coupling: Maximum gain and optimum bandwidth.<br>
+            - Over-critical coupling: The gain curve develops a 'double hump' and the bandwidth increases significantly.
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkMCQ(name, correctVal, explanation) {
+        const options = document.getElementsByName(name);
+        let selected = "";
+        for (let opt of options) { if (opt.checked) selected = opt.value; }
+        
+        const display = document.getElementById('expl-' + name);
+        display.style.display = "block";
+        
+        if (selected === correctVal) {
+            display.innerHTML = "<span class='correct'>Correct!</span><br>" + explanation;
+        } else if (selected === "") {
+            display.innerHTML = "Please select an answer.";
+        } else {
+            display.innerHTML = "<span class='wrong'>Wrong.</span><br><strong>Explanation:</strong> " + explanation;
+        }
+    }
+
+    function revealFill(id, ans) {
+        document.getElementById(id).value = ans;
+    }
+
+    function toggleSubjective(id) {
+        const div = document.getElementById(id);
+        div.style.display = (div.style.display === "block") ? "none" : "block";
+    }
+</script>
+
+</body>
+</html>
