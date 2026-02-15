@@ -3,202 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electronics Engineering Quiz</title>
+    <title>Electronics Engineering Interactive Quiz</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background: var(--bg); color: #333; max-width: 900px; margin: 0 auto; padding: 20px; }
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f8f9fa; --success: #27ae60; --error: #e74c3c; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background: var(--bg); color: #333; max-width: 1000px; margin: 0 auto; padding: 20px; }
         .section { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px; }
         h1 { text-align: center; color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
         h2 { color: var(--accent); border-left: 5px solid var(--accent); padding-left: 15px; margin-top: 30px; }
-        .q-wrap { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .q-wrap { border-bottom: 1px solid #eee; padding: 20px 0; position: relative; }
         .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
-        .opt-grid label { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 5px; cursor: pointer; display: block; }
-        .opt-grid label:hover { background: #f0f7ff; }
-        button { background: var(--accent); color: white; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 5px; }
+        .opt-grid label { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 5px; cursor: pointer; display: block; transition: 0.2s; }
+        .opt-grid label:hover { background: #f0f7ff; border-color: var(--accent); }
+        button { background: var(--accent); color: white; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         button:hover { background: var(--primary); }
-        .expl { display: none; margin-top: 10px; padding: 12px; background: #e8f4fd; border-radius: 5px; border-left: 4px solid var(--accent); }
-        .match-container { display: flex; flex-direction: column; gap: 10px; }
-        .match-item { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #eee; padding: 10px; border-radius: 5px; }
+        .inline-feedback { display: none; margin-top: 10px; padding: 12px; border-radius: 5px; border-left: 4px solid var(--accent); background: #fdfdfd; font-size: 0.95em; }
+        .match-row { display: grid; grid-template-columns: 1fr 1fr 150px; gap: 20px; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .match-ans { color: var(--success); font-weight: bold; display: none; }
         .subjective-list { padding-left: 20px; }
-        .subjective-list li { margin-bottom: 15px; }
-        input[type="text"] { border: 1px solid #ccc; border-radius: 4px; padding: 5px; width: 150px; }
+        .subjective-list li { margin-bottom: 15px; font-weight: 500; }
+        input[type="text"] { border: 1px solid #ccc; border-radius: 4px; padding: 5px; width: 140px; }
+        .img-placeholder { font-style: italic; color: #666; margin: 10px 0; border: 1px dashed #ccc; padding: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
-<h1>Power Amplifiers & Tuned Circuits Quiz</h1>
+<h1>Power Amplifiers & Tuned Circuits Assessment</h1>
 
 <div class="section">
     <h2>I. Multiple Choice Questions</h2>
     
-    <div class="q-wrap">
-        <p>1. Which power amplifier class provides the highest theoretical efficiency?</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q1" value="C"> A) Class B</label>
-            <label><input type="radio" name="q1" value="C"> B) Class A</label>
-            <label><input type="radio" name="q1" value="C"> C) Class C</label>
-            <label><input type="radio" name="q1" value="C"> D) Class AB</label>
-        </div>
-        <button onclick="check('q1', 'C', 'Class C conducts for less than 180 degrees, minimizing power loss.')">Check Answer</button>
-        <div id="e-q1" class="expl"></div>
-    </div>
+    <script>
+        const mcqData = [
+            { id: 1, q: "Which power amplifier class provides the highest theoretical efficiency?", a: "C", opts: ["Class B", "Class A", "Class C", "Class AB"], ex: "Class C conducts for less than 180 degrees, minimizing power loss." },
+            { id: 2, q: "Crossover distortion in Class B push-pull occurs because:", a: "B", opts: ["Saturation bias", "Base-emitter junction needs ~0.7V", "Center-tapping", "High frequency filtering"], ex: "Transistors stay OFF until the input exceeds the barrier potential." },
+            { id: 3, q: "Max theoretical efficiency of a transformer-coupled Class A amplifier is:", a: "B", opts: ["25%", "50%", "78.5%", "100%"], ex: "Transformer coupling removes DC power waste in the load, raising efficiency to 50%." },
+            { id: 4, q: "A Tuned Amplifier is used to amplify:", a: "D", opts: ["Wide band", "Low-frequency audio", "Only DC", "Narrow band around resonance"], ex: "Tuned amplifiers select a specific frequency using an LC tank." },
+            { id: 5, q: "The Q-factor of a tuned circuit is the ratio of:", a: "A", opts: ["Resonant Frequency to Bandwidth", "Bandwidth to Resonant Frequency", "Output to Input Power", "Reactance to Resistance"], ex: "Q = f_r / BW." },
+            { id: 6, q: "Harmonic distortion in power amplifiers is caused by:", a: "B", opts: ["High quality resistors", "Non-linear transistor traits", "Linear characteristics", "Small input signals"], ex: "Curvature in the I-V characteristics creates unwanted harmonics." },
+            { id: 7, q: "Staggered tuning is used in multi-stage amplifiers to increase:", a: "C", opts: ["Gain", "Selectivity", "Bandwidth", "Efficiency"], ex: "Offsetting resonant frequencies flattens the passband and widens response." },
+            { id: 8, q: "Heat sinks are used in large signal amplifiers to:", a: "D", opts: ["Increase gain", "Reduce circuit size", "Improve response", "Prevent thermal runaway"], ex: "They dissipate heat to keep the collector junction temperature safe." },
+            { id: 9, q: "The resonance frequency f_r of an LC circuit is given by:", a: "B", opts: ["None", "1 / (2 * pi * sqrt(L * C))", "L / C", "2 * pi * L * C"], ex: "Resonance happens when Inductive Reactance equals Capacitive Reactance." },
+            { id: 10, q: "A Class C amplifier is primarily used in:", a: "A", opts: ["RF Transmitters", "Audio systems", "Precision tools", "DC supplies"], ex: "Its high efficiency makes it ideal for constant-amplitude RF signals." },
+            { id: 11, q: "Max efficiency of Class A series-fed is:", a: "A", opts: ["25%", "50%", "78.5%", "100%"], ex: "Efficiency is low due to continuous DC current in the load resistor." },
+            { id: 12, q: "Which class has a conduction angle of exactly 360 degrees?", a: "B", opts: ["Class B", "Class A", "Class C", "Class AB"], ex: "Class A stays biased in the active region for the full cycle." },
+            { id: 13, q: "Double tuned amplifiers are used for:", a: "B", opts: ["Narrower BW", "Steeper roll-off (skirts)", "Less gain", "DC Isolation"], ex: "They provide a flatter passband and better selectivity." },
+            { id: 14, q: "Large signal amplifiers prioritize:", a: "B", opts: ["Voltage gain", "Power efficiency/Output", "Low noise", "High input impedance"], ex: "The primary goal is delivering maximum power to the load." },
+            { id: 15, q: "In Class A, the transformer is used for:", a: "B", opts: ["Phase splitting", "Impedance matching", "Rectification", "Current limiting"], ex: "It matches low speaker impedance to the high transistor output impedance." },
+            { id: 16, q: "A Class C amplifier conducts for:", a: "B", opts: ["180 degrees", "Less than 180 degrees", "360 degrees", "Exactly 270 degrees"], ex: "The short pulses of current lead to very high efficiency." },
+            { id: 17, q: "Tuned amplifiers mostly use:", a: "C", opts: ["Direct coupling", "RC coupling", "Inductive coupling", "Series coupling"], ex: "Transformer/Inductive coupling allows for LC resonance integration." },
+            { id: 18, q: "The thermal resistance of a heat sink should be:", a: "B", opts: ["High", "Low", "Infinite", "Negative"], ex: "Low resistance allows heat to flow quickly from the transistor to the air." },
+            { id: 19, q: "Push-pull configuration cancels out:", a: "B", opts: ["Odd harmonics", "Even harmonics", "Fundamental frequency", "Noise"], ex: "Symmetry in the two transistors cancels the second harmonic." },
+            { id: 20, q: "Bandwidth (BW) is equal to:", a: "B", opts: ["f_r * Q", "f_r / Q", "Q / f_r", "1 / (f_r * Q)"], ex: "Bandwidth is inversely proportional to the Quality factor." }
+        ];
 
-    <div class="q-wrap">
-        <p>11. Max efficiency of Class A series-fed is:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q11" value="A"> A) 25%</label>
-            <label><input type="radio" name="q11" value="A"> B) 50%</label>
-            <label><input type="radio" name="q11" value="A"> C) 78.5%</label>
-            <label><input type="radio" name="q11" value="A"> D) 100%</label>
-        </div>
-        <button onclick="check('q11', 'A', 'Max efficiency = 25% for series-fed due to high DC power loss.')">Check Answer</button>
-        <div id="e-q11" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>12. Which class has conduction angle = 360 degrees?</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q12" value="B"> A) Class B</label>
-            <label><input type="radio" name="q12" value="B"> B) Class A</label>
-            <label><input type="radio" name="q12" value="B"> C) Class C</label>
-            <label><input type="radio" name="q12" value="B"> D) Class AB</label>
-        </div>
-        <button onclick="check('q12', 'B', 'Class A conducts throughout the entire input cycle.')">Check Answer</button>
-        <div id="e-q12" class="expl"></div>
-    </div>
-
-    
-
-    <div class="q-wrap">
-        <p>13. Double tuned amplifiers are primarily used to provide:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q13" value="B"> A) Narrower BW</label>
-            <label><input type="radio" name="q13" value="B"> B) Steeper skirts/Better Selectivity</label>
-            <label><input type="radio" name="q13" value="B"> C) Less gain</label>
-            <label><input type="radio" name="q13" value="B"> D) DC isolation</label>
-        </div>
-        <button onclick="check('q13', 'B', 'Double tuning results in a flatter passband and sharper roll-off.')">Check Answer</button>
-        <div id="e-q13" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>14. Power amplifiers are designed to handle:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q14" value="B"> A) Small signals</label>
-            <label><input type="radio" name="q14" value="B"> B) Large signals</label>
-            <label><input type="radio" name="q14" value="B"> C) Frequency only</label>
-            <label><input type="radio" name="q14" value="B"> D) Low noise</label>
-        </div>
-        <button onclick="check('q14', 'B', 'Large signal handling for high output power is the main goal.')">Check Answer</button>
-        <div id="e-q14" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>15. Purpose of a transformer in Class A is:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q15" value="B"> A) Phase split</label>
-            <label><input type="radio" name="q15" value="B"> B) Impedance matching</label>
-            <label><input type="radio" name="q15" value="B"> C) Filtering</label>
-            <label><input type="radio" name="q15" value="B"> D) Voltage regulation</label>
-        </div>
-        <button onclick="check('q15', 'B', 'The transformer matches the low speaker impedance to the high transistor impedance.')">Check Answer</button>
-        <div id="e-q15" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>16. In Class C, the bias is set:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q16" value="C"> A) At zero</label>
-            <label><input type="radio" name="q16" value="C"> B) In center</label>
-            <label><input type="radio" name="q16" value="C"> C) Deep below cutoff</label>
-            <label><input type="radio" name="q16" value="C"> D) Near saturation</label>
-        </div>
-        <button onclick="check('q16', 'C', 'This results in very short pulses of current, yielding high efficiency.')">Check Answer</button>
-        <div id="e-q16" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>17. Coupling used in RF tuned amplifiers:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q17" value="C"> A) Direct</label>
-            <label><input type="radio" name="q17" value="C"> B) RC</label>
-            <label><input type="radio" name="q17" value="C"> C) Inductive/Transformer</label>
-            <label><input type="radio" name="q17" value="C"> D) Series</label>
-        </div>
-        <button onclick="check('q17', 'C', 'Inductive coupling allows for easy integration of the LC tank circuit.')">Check Answer</button>
-        <div id="e-q17" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>18. Thermal resistance of a heat sink should be:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q18" value="B"> A) High</label>
-            <label><input type="radio" name="q18" value="B"> B) Low</label>
-            <label><input type="radio" name="q18" value="B"> C) Infinite</label>
-            <label><input type="radio" name="q18" value="B"> D) Negative</label>
-        </div>
-        <button onclick="check('q18', 'B', 'Lower resistance allows heat to escape the transistor more effectively.')">Check Answer</button>
-        <div id="e-q18" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>19. Push-pull configuration eliminates:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q19" value="B"> A) Odd harmonics</label>
-            <label><input type="radio" name="q19" value="B"> B) Even harmonics</label>
-            <label><input type="radio" name="q19" value="B"> C) Gain</label>
-            <label><input type="radio" name="q19" value="B"> D) DC voltage</label>
-        </div>
-        <button onclick="check('q19', 'B', 'The symmetric nature of the circuit cancels out the second harmonic and others.')">Check Answer</button>
-        <div id="e-q19" class="expl"></div>
-    </div>
-
-    <div class="q-wrap">
-        <p>20. Bandwidth of a tuned circuit is given by:</p>
-        <div class="opt-grid">
-            <label><input type="radio" name="q20" value="B"> A) f_r * Q</label>
-            <label><input type="radio" name="q20" value="B"> B) f_r divided by Q</label>
-            <label><input type="radio" name="q20" value="B"> C) 1 divided by (f_r * Q)</label>
-            <label><input type="radio" name="q20" value="B"> D) Q squared</label>
-        </div>
-        <button onclick="check('q20', 'B', 'Bandwidth = f_r / Q factor.')">Check Answer</button>
-        <div id="e-q20" class="expl"></div>
-    </div>
+        document.write(mcqData.map(item => `
+            <div class="q-wrap">
+                <p><strong>${item.id}.</strong> ${item.q}</p>
+                <div class="opt-grid">
+                    ${item.opts.map((o, i) => {
+                        const letter = String.fromCharCode(65 + i);
+                        return `<label><input type="radio" name="q${item.id}" value="${letter}"> ${letter}) ${o}</label>`;
+                    }).join('')}
+                </div>
+                <button onclick="checkM(${item.id}, '${item.a}', '${item.ex}')">Check Answer</button>
+                <div id="e${item.id}" class="inline-feedback"></div>
+            </div>
+        `).join(''));
+    </script>
 </div>
 
 <div class="section">
     <h2>II. Fill in the Blanks</h2>
-    <div class="q-wrap">1. Max theoretical efficiency of Class B push-pull is <input type="text" id="f1"> <button onclick="rev('f1', '78.5%')">Reveal</button></div>
-    <div class="q-wrap">2. Current flows for less than 180 degrees in <input type="text" id="f2"> amplifier. <button onclick="rev('f2', 'Class C')">Reveal</button></div>
-    <div class="q-wrap">3. Flattening the passband by using different stage frequencies is <input type="text" id="f3"> tuning. <button onclick="rev('f3', 'Staggered')">Reveal</button></div>
-    <div class="q-wrap">4. <input type="text" id="f4"> distortion occurs near the zero-crossing. <button onclick="rev('f4', 'Crossover')">Reveal</button></div>
-    <div class="q-wrap">5. The range of frequencies between 3dB points is <input type="text" id="f5">. <button onclick="rev('f5', 'Bandwidth')">Reveal</button></div>
-    <div class="q-wrap">6. In transformer Class A, max efficiency is <input type="text" id="f6">. <button onclick="rev('f6', '50%')">Reveal</button></div>
-    <div class="q-wrap">7. Resonance occurs when X_L equals <input type="text" id="f7">. <button onclick="rev('f7', 'X_C (Capacitive Reactance)')">Reveal</button></div>
-    <div class="q-wrap">8. <input type="text" id="f8"> factor indicates the sharpness of tuning. <button onclick="rev('f8', 'Quality (Q)')">Reveal</button></div>
-    <div class="q-wrap">9. To prevent overheating, <input type="text" id="f9"> are attached to transistors. <button onclick="rev('f9', 'Heat Sinks')">Reveal</button></div>
-    <div class="q-wrap">10. Push-pull uses <input type="text" id="f10"> transformers at input/output. <button onclick="rev('f10', 'Center-tapped')">Reveal</button></div>
+    <div class="q-wrap">1. The maximum theoretical efficiency of a Class B push-pull amplifier is <input type="text" id="f1"> <button onclick="rev('f1', '78.5%')">Show</button></div>
+    <div class="q-wrap">2. Collector current flows for less than 180 degrees in a <input type="text" id="f2"> amplifier. <button onclick="rev('f2', 'Class C')">Show</button></div>
+    <div class="q-wrap">3. <input type="text" id="f3"> tuning flattens the passband by offset stage frequencies. <button onclick="rev('f3', 'Staggered')">Show</button></div>
+    <div class="q-wrap">4. <input type="text" id="f4"> distortion is avoided by using Class AB biasing. <button onclick="rev('f4', 'Crossover')">Show</button></div>
+    <div class="q-wrap">5. The range of frequencies where gain is within 3dB of max is <input type="text" id="f5">. <button onclick="rev('f5', 'Bandwidth')">Show</button></div>
+    <div class="q-wrap">6. The efficiency of a Transformer-Coupled Class A amplifier is <input type="text" id="f6">. <button onclick="rev('f6', '50%')">Show</button></div>
+    <div class="q-wrap">7. Resonance occurs when Inductive Reactance (X_L) equals <input type="text" id="f7">. <button onclick="rev('f7', 'Capacitive Reactance (X_C)')">Show</button></div>
+    <div class="q-wrap">8. The <input type="text" id="f8"> Factor indicates the selectivity of a tuned circuit. <button onclick="rev('f8', 'Quality (Q)')">Show</button></div>
+    <div class="q-wrap">9. To dissipate excess heat, <input type="text" id="f9"> are used in power transistors. <button onclick="rev('f9', 'Heat Sinks')">Show</button></div>
+    <div class="q-wrap">10. Push-pull amplifiers use <input type="text" id="f10"> transformers for phase splitting. <button onclick="rev('f10', 'Center-tapped')">Show</button></div>
 </div>
 
 <div class="section">
     <h2>III. Match the Following</h2>
-    <div class="match-container">
-        <div class="match-item">1. Class B <span><button onclick="alert('Matches: (a) 180 degree conduction')">Show Match</button></span></div>
-        <div class="match-item">2. Class C <span><button onclick="alert('Matches: (b) Conduction angle < 180')">Show Match</button></span></div>
-        <div class="match-item">3. LC Circuit <span><button onclick="alert('Matches: (c) Resonant Frequency source')">Show Match</button></span></div>
-        <div class="match-item">4. Push-Pull <span><button onclick="alert('Matches: (d) Eliminates even harmonics')">Show Match</button></span></div>
-        <div class="match-item">5. Double Tuned <span><button onclick="alert('Matches: (e) High Selectivity')">Show Match</button></span></div>
-        <div class="match-item">6. Class A <span><button onclick="alert('Matches: (f) 360 degree conduction')">Show Match</button></span></div>
-        <div class="match-item">7. Staggered <span><button onclick="alert('Matches: (g) Broad Bandwidth')">Show Match</button></span></div>
-        <div class="match-item">8. Q-Factor <span><button onclick="alert('Matches: (h) f_r / BW')">Show Match</button></span></div>
-        <div class="match-item">9. Heat Sink <span><button onclick="alert('Matches: (i) Thermal protection')">Show Match</button></span></div>
-        <div class="match-item">10. Transformer <span><button onclick="alert('Matches: (j) Impedance Matching')">Show Match</button></span></div>
-    </div>
+    <div class="match-row"><strong>Left Side</strong> <strong>Right Side</strong> <strong>Action</strong></div>
+    <script>
+        const matches = [
+            ["1. Class A", "(a) Conduction angle 360", "A"],
+            ["2. Class B", "(b) Conduction angle 180", "B"],
+            ["3. Class C", "(c) Conduction angle < 180", "C"],
+            ["4. Tuned Amp", "(d) Uses LC Tank Circuit", "D"],
+            ["5. Push-Pull", "(e) Cancels Even Harmonics", "E"],
+            ["6. Heat Sink", "(f) Thermal protection", "F"],
+            ["7. Staggered Tuning", "(g) Increases Bandwidth", "G"],
+            ["8. Double Tuned", "(h) Flatter passband", "H"],
+            ["9. Q-Factor", "(i) f_r divided by BW", "I"],
+            ["10. Transformer", "(j) Impedance matching", "J"]
+        ];
+        document.write(matches.map((m, i) => `
+            <div class="match-row">
+                <span>${m[0]}</span>
+                <span>${m[1]}</span>
+                <button onclick="document.getElementById('m${i}').style.display='inline'">Check Match</button>
+                <span id="m${i}" class="match-ans"> Correct Match!</span>
+            </div>
+        `).join(''));
+    </script>
 </div>
 
 <div class="section">
     <h2>IV. Subjective Questions</h2>
-    <ul class="subjective-list">
+    <ol class="subjective-list">
         <li>Derive the expression for the Voltage Gain for a Capacitively Coupled Single Tuned Amplifier.</li>
         
         <li>Derive the expression for the maximum collector efficiency of a Series-fed Class A power amplifier. Explain why it is limited to 25%.</li>
@@ -214,22 +131,25 @@
         <li>Derive the expression for the Voltage gain of a double tuned amplifier.</li>
         <li>Derive the expression for the maximum theoretical efficiency of a Transformer Coupled Class A Amplifier. Show that the maximum efficiency is 50%.</li>
         <li>Classify power amplifiers based on the conduction angle and Compare Class A, B, AB, and C amplifiers in terms of theoretical efficiency.</li>
-    </ul>
+    </ol>
 </div>
 
 <script>
-    function check(name, correct, explanation) {
-        let radios = document.getElementsByName(name);
+    function checkM(id, correct, expl) {
+        let radios = document.getElementsByName('q' + id);
         let selected = "";
         for (let r of radios) { if (r.checked) selected = r.value; }
-        let div = document.getElementById('e-' + name);
+        let div = document.getElementById('e' + id);
         div.style.display = "block";
         if (selected === correct) {
-            div.innerHTML = "<b style='color:green'>Correct!</b><br>" + explanation;
+            div.innerHTML = "<b style='color:var(--success)'>Correct!</b><br>" + expl;
+            div.style.borderLeftColor = "var(--success)";
         } else if (selected === "") {
-            div.innerHTML = "Please select an option first.";
+            div.innerHTML = "<b>Please select an option.</b>";
+            div.style.borderLeftColor = "var(--accent)";
         } else {
-            div.innerHTML = "<b style='color:red'>Incorrect.</b><br><b>Correct Answer: " + correct + "</b>. " + explanation;
+            div.innerHTML = "<b style='color:var(--error)'>Incorrect.</b> The correct answer is " + correct + ".<br>" + expl;
+            div.style.borderLeftColor = "var(--error)";
         }
     }
     function rev(id, ans) { document.getElementById(id).value = ans; }
